@@ -1,0 +1,17 @@
+import pandas as pd
+
+def department_highest_salary(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:
+    '''groupby dept id with name 
+    rank 1 of each dept '''
+    
+    salaryByDept = employee.merge(department, how='inner', left_on='departmentId', right_on='id')
+
+    salaryByDept['rank'] = salaryByDept.groupby('departmentId')['salary'].rank(method='dense', ascending=False)
+        
+    top_earners = salaryByDept[salaryByDept['rank'] == 1]
+    
+    return top_earners[['name_y', 'name_x', 'salary']].rename(columns=
+    {
+        'name_y': 'Department',
+        'name_x': 'Employee',
+    })
